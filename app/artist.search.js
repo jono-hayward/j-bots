@@ -12,10 +12,10 @@ rl.close();
 
 if (entity) {
     const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
-    const get = await redis.hGet(`artist:${entity}`, 'did');
+    const get = await redis.hGetAll(`artist:${entity}`);
     
     if (get) {
-        console.log('Results for', entity, get);
+        console.log('Results for', entity, Object.assign({},get));
     } else {
         console.log('No results');
     }

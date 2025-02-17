@@ -5,7 +5,7 @@ const config = {
   timezone:       process.env.TIMEZONE,
 };
 
-const now = new Date('2025-02-15T22:12:00+11:00');
+const now = new Date('2025-02-18T00:35:00+11:00');
 
 const params = new URLSearchParams( {
   station: config.station,
@@ -13,7 +13,7 @@ const params = new URLSearchParams( {
   tz: config.timezone,
   limit: 1,
   from: now.toISOString().replace('Z', '+00:00:00'), // Turn the ISO string into something the ABC API will accept
-
+  station: 'triplej',
 } );
 
 const API = `https://music.abcradio.net.au/api/v1/plays/search.json?${params.toString()}`;
@@ -24,8 +24,12 @@ console.log( 'Querying:' );
 console.log( API );
 const tracks = await scrape();
 
-console.log( tracks.items[0] );
-console.log( tracks.items[0].recording?.artists[0] );
+if (tracks.items.length) {
+  console.log( tracks.items[0] );
+  console.log( tracks.items[0].recording?.artists[0] );
+} else {
+  console.log( tracks );
+}
 
 /*
 const params = new URLSearchParams({

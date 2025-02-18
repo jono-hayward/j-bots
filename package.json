@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "scrape": "node app/scrape.js",
-    "artist-search": "node app/artist.search.js",
     "artist-list": "node app/artist.list.js",
-    "artist-add": "node app/artist.add.js"
+    "artist-add": "node app/artist.add.js",
+    "artist-delete": "node app/artist.delete.js"
   },
   "dependencies": {
     "@atproto/api": "^0.10.1",

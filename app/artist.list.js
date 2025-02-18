@@ -2,10 +2,28 @@ import 'dotenv/config';
 
 import { createClient } from 'redis';
 
-const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
-const keys = await redis.keys('artist:*');
+const main = async () => {
+    const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
+    const keys = await redis.keys('artist:*');
 
-console.log(keys);
+    console.log('Querying...');
 
-await redis.quit();
-process.exit(0);
+    const results = [];
+    for (const k of keys) {
+        const a = await redis.hGetAll(k);
+        results.push({
+            'Artist': a.artist,
+            'Entity': k.replace('artist:',''),
+            'Bluesky DID': a.did,
+        });
+    }
+
+    results.sort((a, b) => a.Artist.localeCompare(b.Artist));
+
+    console.table(results);
+
+    await redis.quit();
+    process.exit(0);
+}
+
+main();

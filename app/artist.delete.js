@@ -1,18 +1,41 @@
 import 'dotenv/config';
 
-import readline from 'readline/promises';
-import { stdin as input, stdout as output } from 'process';
+import { select, confirm } from '@inquirer/prompts';
 
 import { createClient } from 'redis';
 
-const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
+const main = async () => {
+    const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
+    const keys = await redis.keys('artist:*');
 
-const rl = readline.createInterface({ input, output });
+    console.log('Getting list of artists...');
 
-const entity = await rl.question('ABC artist entity ID: ');
+    const choices = [];
+    for (const k of keys) {
+        const a = await redis.hGetAll(k);
+        choices.push({
+            name: a.artist,
+            value: k,
+        });
+    }
 
-const del = await redis.del(entity);
+    choices.sort((a, b) => a.name.localeCompare(b.name));
 
+    const artist = await select({
+        message: 'Choose a artist:',
+        choices,
+    });
 
-await redis.quit();
-process.exit(0);
+    const confirmation = await confirm({
+        message: 'Are you sure you want to delete this artist?'
+    });
+
+    if (confirmation) {
+        await redis.del(artist);
+    }
+
+    await redis.quit();
+    process.exit(0);
+}
+
+main();

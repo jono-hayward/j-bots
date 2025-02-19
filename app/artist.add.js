@@ -9,8 +9,9 @@ const main = async () => {
     const today = new Date();
     const defaultDate = today.toISOString().split('T')[0];
     
+    let station, date, time;
     try {
-        const station = await select({
+        station = await select({
             message: 'Select a station:',
             choices: [
                 {
@@ -24,11 +25,11 @@ const main = async () => {
             ],
         });
 
-        const date = await input({
+        date = await input({
             message: 'Play date (yyyy-mm-dd):',
             default: defaultDate,
         });
-        const time = await input({ message: 'Play time (hh:mm):' });
+        time = await input({ message: 'Play time (hh:mm):' });
     } catch {
         // User exited
         process.exit(0);
@@ -78,8 +79,9 @@ const main = async () => {
         process.exit(0);
     }
 
+    let handle;
     try {
-        const handle = await input({ message: 'Bluesky handle:' });
+        handle = await input({ message: 'Bluesky handle:' });
     } catch {
         // User exited
         process.exit(0);

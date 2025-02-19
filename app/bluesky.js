@@ -21,3 +21,19 @@ export const resolve = async (handle) => {
     }
     return false;
 }
+
+export const follow = async (did) => {
+  if (!did) {
+    console.error('No Bluesky DID provided');
+    return false;
+  }
+  const agent = new BskyAgent({ service: "https://bsky.social" });
+  await agent.login({
+    identifier: process.env.BSKY_USERNAME,
+    password: process.env.BSKY_PASSWORD,
+  });
+
+  const result = await agent.follow(did);
+  console.log(result);
+  return true;
+}

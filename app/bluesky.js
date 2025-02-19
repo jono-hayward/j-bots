@@ -34,6 +34,8 @@ export const follow = async (did) => {
   });
 
   const result = await agent.follow(did);
-  console.log(result);
-  return true;
+  if (result && result.validationStatus === 'valid')
+      return true;
+  }
+  return false;
 }

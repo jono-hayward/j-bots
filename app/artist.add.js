@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import { createClient } from 'redis';
 import { input, select, confirm } from '@inquirer/prompts';
-import { resolve } from './bsky.resolve.js';
+import { resolve, follow } from './bluesky.js';
 import { parse } from './helpers.js';
 
 const main = async () => {

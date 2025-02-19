@@ -6,21 +6,33 @@ import { resolve, follow } from './bluesky.js';
 import { parse } from './helpers.js';
 
 const main = async () => {
-    const station = await select({
-        message: 'Select a station:',
-        choices: [
-            {
-                name: 'Triple J',
-                value: 'triplej',
-            },
-            {
-                name: 'Double J',
-                value: 'doublej',
-            },
-        ],
-    });
-    const date = await input({ message: 'Play date (yyyy-mm-dd):' });
-    const time = await input({ message: 'Play time (hh:mm):' });
+    const today = new Date();
+    const defaultDate = today.toISOString().split('T')[0];
+    
+    try {
+        const station = await select({
+            message: 'Select a station:',
+            choices: [
+                {
+                    name: 'Triple J',
+                    value: 'triplej',
+                },
+                {
+                    name: 'Double J',
+                    value: 'doublej',
+                },
+            ],
+        });
+
+        const date = await input({
+            message: 'Play date (yyyy-mm-dd):',
+            default: defaultDate,
+        });
+        const time = await input({ message: 'Play time (hh:mm):' });
+    } catch {
+        // User exited
+        process.exit(0);
+    }
 
     const playDate = new Date(`${date} ${time}`);
 
@@ -48,10 +60,15 @@ const main = async () => {
                 value: song,
             });
         }
-        song = await select({
-            message: 'Select a play:',
-            choices,
-        });
+        try {
+            song = await select({
+                message: 'Select a play:',
+                choices,
+            });
+        } catch {
+            // User exited
+            process.exit(0);
+        }
         if (!song) {
             console.log('No song selected');
             process.exit(0);
@@ -61,7 +78,12 @@ const main = async () => {
         process.exit(0);
     }
 
-    const handle = await input({ message: 'Bluesky handle:' });
+    try {
+        const handle = await input({ message: 'Bluesky handle:' });
+    } catch {
+        // User exited
+        process.exit(0);
+    }
     const did = await resolve(handle);
 
     if (!did) {
@@ -81,8 +103,13 @@ const main = async () => {
     }
     console.log('✔️ Artist tagging set up');
 
-    if (await confirm({ message: 'Follow artist on Bluesky?' })) {
-        await follow(did);
+    try {
+        if (await confirm({ message: 'Follow artist on Bluesky?' })) {
+            await follow(did);
+        }
+    } catch {
+        // User exited
+        process.exit(0);
     }
 
     console.log('✔️ Done!');

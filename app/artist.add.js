@@ -74,7 +74,19 @@ const main = async () => {
         artist: song.artist,
         did
     });
-    console.log('Send result', send);
+
+    if (send < 0) {
+        console.error('Failed to add artist to tag registry');
+        process.exit(1);
+    }
+    console.log('✔️ Artist tagging set up');
+
+    if (await confirm({ message: 'Follow artist on Bluesky?' })) {
+        await follow(did);
+    }
+
+    console.log('✔️ Done!');
+    
     await redis.quit();
     process.exit(0);
 }

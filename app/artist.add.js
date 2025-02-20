@@ -32,7 +32,7 @@ const main = async () => {
         });
         time = await input({
 	    message: 'Play time (hh:mm):',
-	    transformer: (time) => formatTime(time),
+	    transformer: formatTime,
 	});
 	time = formatTime(time);
     } catch {

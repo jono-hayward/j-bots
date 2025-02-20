@@ -6,10 +6,11 @@ import { resolve, follow } from './bluesky.js';
 import { parse } from './helpers.js';
 
 const main = async () => {
-    const today = new Date();
-    const defaultDate = today.toISOString().split('T')[0];
     
     let station, date, time;
+
+    const formatTime = (time) => (/^\d{4}$/.test(time)) ? `${time.slice(0,2)}:${time.slice(2)}` : time;
+
     try {
         station = await select({
             message: 'Select a station:',
@@ -27,13 +28,18 @@ const main = async () => {
 
         date = await input({
             message: 'Play date (yyyy-mm-dd):',
-            default: defaultDate,
+            default: new Date().toLocaleDateString('en-CA'),
         });
-        time = await input({ message: 'Play time (hh:mm):' });
+        time = await input({
+	    message: 'Play time (hh:mm):',
+	    transformer: (time) => formatTime(time),
+	});
+	time = formatTime(time);
     } catch {
         // User exited
         process.exit(0);
     }
+
 
     const playDate = new Date(`${date} ${time}`);
 

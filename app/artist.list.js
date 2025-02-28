@@ -18,7 +18,7 @@ const main = async () => {
         });
     }
 
-    results.sort((a, b) => a.Artist.localeCompare(b.Artist));
+    results.sort((a, b) => a.Artist.toLowerCase().replace('the ','').localeCompare(b.Artist.toLowerCase().replace('the ','')));
 
     console.table(results);
 

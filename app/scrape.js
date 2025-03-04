@@ -16,7 +16,7 @@ dotenv.config();
 // Load station-specific config
 if (!process.env.STATION) {
   console.error('🚫  No station specified.');
-  process.exit(1);
+  exit(1);
 }
 dotenv.config({ path: `.${process.env.STATION}.env` });
 
@@ -49,7 +49,16 @@ try {
   });
 } catch (err) {
   console.error('⛔ Failed to get latest Bluesky post: ', err);
-  process.exit(1);
+  exit(1);
+}
+
+const exit = async (status) => {
+  if (process.env.HC_URL) {
+    console.log(`🏓  Pinging health check with ${ status === 1 ? 'failure' : 'success' } status.`)
+    await fetch(`${process.env.HC_URL}/${status}`);
+    console.log('☑️  Done.')
+  }
+  process.exit(status);
 }
 
 let latest;
@@ -92,7 +101,7 @@ if (!tracks.total) {
   console.log('⛔  No new plays since last post.');
   console.log('');
   console.log('🏁  Finished early.');
-  process.exit(0);
+  exit(0);
 }
 
 /**
@@ -182,4 +191,4 @@ if (process.env.REDIS_URL) {
 }
 
 console.log('🏁  Finished run.');
-process.exit(0);
+exit(0);

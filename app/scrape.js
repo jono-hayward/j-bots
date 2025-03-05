@@ -53,9 +53,9 @@ try {
 }
 
 const exit = async (status) => {
-  if (process.env.HC_URL) {
+  if (process.env.HB_PING) {
     console.log(`🏓  Pinging health check with ${ status === 1 ? 'failure' : 'success' } status.`)
-    await fetch(`${process.env.HC_URL}/${status}`);
+    await fetch(`${process.env.HB_PING}/${status}`);
     console.log('☑️  Done.')
   }
   process.exit(status);
@@ -168,6 +168,10 @@ for (const track of tracks.items) {
     try {
       await agent.post(postObject);
       console.log('☑️  Done!');
+      if (process.env.HB_POST) {
+	// Post success to heartbeat monitor
+        await fetch(`${process.env.HB_POST}/0`);
+      }
     } catch (err) {
       console.error('⛔  Failed to post to Bluesky: ', err);
       postObject.error = err;
@@ -178,6 +182,10 @@ for (const track of tracks.items) {
       const logFileName = `${process.env.STATION}.${song.started.toISOString().replace(/[:.]/g, '-')}.json`;
       const logFilePath = path.join(logDir, logFileName);
       fs.writeFileSync(logFilePath, JSON.stringify(postObject, null, 2), 'utf8');
+      if (process.env.HB_POST) {
+	// Post failure to heartbeat monitor
+        await fetch(`${process.env.HB_POST}/1`);
+      }
     }
   }
 

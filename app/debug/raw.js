@@ -5,13 +5,17 @@ const config = {
   timezone:       process.env.TIMEZONE,
 };
 
-const now = new Date('2025-02-18T05:10:00+11:00');
+// const now = new Date('2025-02-18T05:10:00+11:00');
+
+const now = new Date();
+
+now.setHours(now.getHours() - 1);
 
 const params = new URLSearchParams( {
   station: config.station,
   order: 'asc', // We want them in descending order to always get the latest, even if for some reason there's more results than our limit
   tz: config.timezone,
-  limit: 1,
+  // limit: 1,
   from: now.toISOString().replace('Z', '+00:00:00'), // Turn the ISO string into something the ABC API will accept
   station: 'triplej',
 } );
@@ -24,12 +28,14 @@ console.log( 'Querying:' );
 console.log( API );
 const tracks = await scrape();
 
-if (tracks.items.length) {
-  console.log( tracks.items[0] );
-  console.log( tracks.items[0].recording?.artists[0] );
-} else {
-  console.log( tracks );
-}
+// if (tracks.items.length) {
+//   console.log( tracks.items[0] );
+//   console.log( tracks.items[0].recording?.artists[0] );
+// } else {
+//   console.log( tracks );
+// }
+
+console.log( JSON.stringify(tracks, null, 2));
 
 /*
 const params = new URLSearchParams({

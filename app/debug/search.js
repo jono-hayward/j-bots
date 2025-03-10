@@ -1,4 +1,4 @@
-import { searchAppleMusic, searchSpotify, searchYouTube, searchGenius } from "./helpers.js";
+import { searchAppleMusic, searchSpotify, searchYouTube, searchGenius } from "../helpers.js";
 
 const search = {
   title: "Eat Sleep Fuck Forever",

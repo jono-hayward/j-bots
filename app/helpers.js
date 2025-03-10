@@ -5,32 +5,25 @@ import YouTubeMusicAPI from "youtube-music-api";
 
 export const parse = (song) => {
   const { played_time, recording, release, count } = song;
-  const { title: recordingTitle, artists, artwork, releases } = recording || {};
+  const artist = release?.artists?.[0];
 
-  if (played_time && recordingTitle && artists) {
+  if (played_time && recording.title && artist) {
     const result = {
       started: new Date(played_time),
-      title: recordingTitle,
-      artist: artists[0]?.name,
-      artist_entity: artists[0]?.arid,
-      album: release?.title || "",
+      title: recording.title,
+      artist: artist?.name,
+      artist_entity: artist?.arid,
+      album: release?.title,
+      artwork: release?.artwork?.[0] || release?.artists?.[0]?.artwork?.[0],
+      artwork_aspect: release?.artwork?.[0] ? '1x1' : '16x9',
+      count: count || null,
     };
 
-    if (count) {
-      result.count = count;
-    }
-
-    if (artists[0].links && artists[0].links.length) {
-      const link = artists[0].links[0];
+    if (artist?.links?.length) {
+      const link = artist.links[0];
       if (link.service_id === "unearthed") {
         result.unearthed = link.url;
       }
-    }
-
-    const artworkSource =
-      artwork?.[0] || (releases?.[0]?.artwork?.[0] && releases[0].artwork[0]);
-    if (artworkSource) {
-      result.artwork = getImg(artworkSource);
     }
 
     return result;

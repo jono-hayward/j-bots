@@ -1,42 +1,23 @@
+import './config.js';
 import fs from 'fs';
 import path from 'path';
 
-import dotenv from 'dotenv';
-
-import { createClient } from 'redis';
-
 import { parse } from './helpers.js';
 import { compose } from './compose.js';
+import { process_artwork } from './artwork.js';
 
-import pkg from '@atproto/api';
-const { BskyAgent } = pkg;
+import { agent, redis } from './connections.js';
 
-// Load global config
-dotenv.config();
-// Load station-specific config
-if (!process.env.STATION) {
-  console.error('🚫  No station specified.');
-  exit(1);
-}
-dotenv.config({ path: `.${process.env.STATION}.env` });
-
+const now = new Date();
 const timeOptions = {
   timeStyle: 'short',
   timeZone: process.env.TIMEZONE,
 };
 
-const now = new Date();
-console.log(`📻  ${process.env.STATION}`);
+console.log(``);
 console.log(`🚀  Starting run at ${now.toLocaleTimeString('en-AU', timeOptions)}`);
 console.log(``);
 
-// Begin talking to Bluesky
-console.log('🪵  Logging in to Bluesky');
-const agent = new BskyAgent({ service: "https://bsky.social" });
-await agent.login({
-  identifier: process.env.BSKY_USERNAME,
-  password: process.env.BSKY_PASSWORD,
-});
 
 // Get latest post date
 console.log('🔍  Finding the time of the most recent post');
@@ -49,7 +30,7 @@ try {
   });
 } catch (err) {
   console.error('⛔ Failed to get latest Bluesky post: ', err);
-  exit(1);
+  await exit(1);
 }
 
 const exit = async (status) => {
@@ -68,8 +49,10 @@ if (feed?.data?.feed?.length) {
   const posts = feed.data.feed.filter(entry => !entry.post.record.text.startsWith('🤖'));
   latest = new Date(posts[0].post.record.createdAt);
 
-  /* Doing the API query based on the exact time of the post seems to result in a possible duplicate
-   * Just offsetting by a few seconds should get around that */
+  /**
+   * Doing the API query based on the exact time of the post seems to result in a possible duplicate
+   * Just offsetting by a few seconds should get around that
+   */
   latest.setSeconds(latest.getSeconds() + 10);
 
   console.log(`⌚️  Latest post was at ${latest.toLocaleTimeString('en-AU', timeOptions)}`);
@@ -88,8 +71,8 @@ const params = new URLSearchParams({
   station: process.env.STATION,
   tz: process.env.TIMEZONE,
   from: latest.toISOString().replace('Z', '+00:00:00'), // Turn the ISO string into something the ABC API will accept
-  limit: 20,
-  order: 'desc', // We want them in descending order to always get the latest, even if for some reason there's more results than our limit
+  limit: 30,
+  order: 'asc',
 });
 
 const API = `https://music.abcradio.net.au/api/v1/plays/search.json?${params.toString()}`;
@@ -101,7 +84,7 @@ if (!tracks.total) {
   console.log('⛔  No new plays since last post.');
   console.log('');
   console.log('🏁  Finished early.');
-  exit(0);
+  await exit(0);
 }
 
 /**
@@ -111,11 +94,6 @@ if (!tracks.total) {
  */
 tracks.items.sort((a, b) => new Date(a.played_time) - new Date(b.played_time));
 
-let redis = null;
-if (process.env.REDIS_URL) {
-  console.log('🛜  Connecting to redis');
-  redis =  await createClient({ url: process.env.REDIS_URL }).connect();
-}
 
 /** Iterate through tracks */
 for (const track of tracks.items) {
@@ -131,47 +109,18 @@ for (const track of tracks.items) {
     const postObject = await compose(song, redis);
 
     if (song.artwork) {
-
-      console.log(' ');
-      console.log('🖼️  Processing artwork');
-
-      try {
-        const response = await fetch(song.artwork);
-        const buffer = await response.arrayBuffer();
-
-        // An API error stated the maximum file size as 976.56kb
-        if (buffer.byteLength < 976560) {
-          console.log('⬆️  Uploading artwork to Bluesky...');
-          const { data } = await agent.uploadBlob(new Uint8Array(buffer), { encoding: 'image/jpeg' });
-          console.log('✅  Uploaded!');
-
-          postObject.embed = {
-            $type: 'app.bsky.embed.images',
-            images: [{
-              alt: `Album artwork for "${song.album}" by ${song.artist}`,
-              image: data.blob,
-              aspectRatio: {
-                width: 1,
-                height: 1,
-              }
-            }]
-          };
-        }
-      } catch (err) {
-        console.error('❌  Image processing failed. Skipping...');
-        console.error('Error:', err);
-      }
+      await process_artwork( song, postObject );
+    } else {
+      console.log('🪧  No artwork found');
     }
-
+    
     console.log('');
     console.log('✉️  Posting to Bluesky', postObject);
+    let success;
     try {
       await agent.post(postObject);
       console.log('☑️  Done!');
-      if (process.env.HB_POST) {
-	// Post success to heartbeat monitor
-        await fetch(`${process.env.HB_POST}/0`);
-      }
+      success = true;
     } catch (err) {
       console.error('⛔  Failed to post to Bluesky: ', err);
       postObject.error = err;
@@ -183,8 +132,20 @@ for (const track of tracks.items) {
       const logFilePath = path.join(logDir, logFileName);
       fs.writeFileSync(logFilePath, JSON.stringify(postObject, null, 2), 'utf8');
       if (process.env.HB_POST) {
-	// Post failure to heartbeat monitor
+	      // Post failure to heartbeat monitor
         await fetch(`${process.env.HB_POST}/1`);
+      }
+    }
+
+    if (process.env.HB_POST && success) {
+      // Post success to heartbeat monitor
+      console.log(`🏓  Pinging post check with success status.`);
+      try {
+        await fetch(`${process.env.HB_POST}/0`, {
+          signal: AbortSignal.timeout(2000),
+        });
+      } catch (err) {
+        console.error('Failed to ping post status', err);
       }
     }
   }
@@ -199,4 +160,4 @@ if (process.env.REDIS_URL) {
 }
 
 console.log('🏁  Finished run.');
-exit(0);
+await exit(0);

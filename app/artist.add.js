@@ -1,9 +1,11 @@
-import 'dotenv/config';
+import './config.js';
 
-import { createClient } from 'redis';
+import { redis } from './connections.js';
+
 import { input, select, confirm } from '@inquirer/prompts';
 import { resolve, follow } from './bluesky.js';
 import { parse } from './helpers.js';
+import { compose } from './compose.js';
 
 const main = async () => {
     

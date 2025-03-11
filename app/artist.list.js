@@ -1,9 +1,7 @@
-import 'dotenv/config';
-
-import { createClient } from 'redis';
+import { getRedis } from './connections.js';
+const redis = await getRedis();
 
 const main = async () => {
-    const redis =  await createClient({ url: process.env.REDIS_URL }).connect();
     const keys = await redis.keys('artist:*');
 
     console.log('Querying...');

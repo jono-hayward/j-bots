@@ -1,12 +1,13 @@
 import './config.js';
-import fs from 'fs';
-import path from 'path';
 
 import { parse } from './helpers.js';
 import { compose } from './compose.js';
 import { process_artwork } from './artwork.js';
+import { post } from './post.js';
 
-import { agent, redis } from './connections.js';
+import { getBluesky, getRedis } from './connections.js';
+const agent = await getBluesky();
+const redis = await getRedis();
 
 const now = new Date();
 const timeOptions = {
@@ -87,13 +88,6 @@ if (!tracks.total) {
   await exit(0);
 }
 
-/**
- * Sort the items into ascending order, so we post from oldest to most recent.
- * Technically since we're setting the createdAt attribute to the played time anyway,
- * this shouldn't matter. But it feels neater to do it this way?
- */
-tracks.items.sort((a, b) => new Date(a.played_time) - new Date(b.played_time));
-
 
 /** Iterate through tracks */
 for (const track of tracks.items) {
@@ -106,7 +100,7 @@ for (const track of tracks.items) {
     console.log(`🎵  Processing "${song.title}" by ${song.artist}, played at ${song.started.toLocaleTimeString('en-AU', timeOptions)}`);
     song.artist_entity && console.log('🧑‍🎤  Artist entity: ', song.artist_entity);
 
-    const postObject = await compose(song, redis);
+    const postObject = await compose(song);
 
     if (song.artwork) {
       await process_artwork( song, postObject );
@@ -114,47 +108,11 @@ for (const track of tracks.items) {
       console.log('🪧  No artwork found');
     }
     
-    console.log('');
-    console.log('✉️  Posting to Bluesky', postObject);
-    let success;
-    try {
-      await agent.post(postObject);
-      console.log('☑️  Done!');
-      success = true;
-    } catch (err) {
-      console.error('⛔  Failed to post to Bluesky: ', err);
-      postObject.error = err;
-      const logDir = path.join('./log/failed-posts');
-      if (!fs.existsSync(logDir)) {
-        fs.mkdirSync(logDir);
-      }
-      const logFileName = `${process.env.STATION}.${song.started.toISOString().replace(/[:.]/g, '-')}.json`;
-      const logFilePath = path.join(logDir, logFileName);
-      fs.writeFileSync(logFilePath, JSON.stringify(postObject, null, 2), 'utf8');
-      if (process.env.HB_POST) {
-	      // Post failure to heartbeat monitor
-        await fetch(`${process.env.HB_POST}/1`);
-      }
-    }
-
-    if (process.env.HB_POST && success) {
-      // Post success to heartbeat monitor
-      console.log(`🏓  Pinging post check with success status.`);
-      try {
-        await fetch(`${process.env.HB_POST}/0`, {
-          signal: AbortSignal.timeout(2000),
-        });
-      } catch (err) {
-        console.error('Failed to ping post status', err);
-      }
-    }
+    await post( postObject );
   }
-
-  console.log(' ');
-
 }
 
-if (process.env.REDIS_URL) {
+if (redis) {
   console.log('❌  Logging out of Redis');
   await redis.quit();
 }

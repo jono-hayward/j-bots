@@ -1,12 +1,9 @@
+import './config.js';
 import { getRedis } from './connections.js';
 const redis = await getRedis();
 
 import { input, select, confirm } from '@inquirer/prompts';
-import { resolve, follow } from './bluesky.js';
 import { parse } from './helpers.js';
-import { compose } from './compose.js';
-import { post } from './post.js';
-import { process_artwork } from './artwork.js';
 
 const main = async () => {
     
@@ -30,9 +27,6 @@ const main = async () => {
         // user exited
         process.exit(0);
     }
-
-    process.env.STATION = station.toUpperCase();
-    await import('./config.js');
 
     const formatTime = (time) => {
         if (/^\d{4}$/.test(time)) {
@@ -58,7 +52,6 @@ const main = async () => {
         // User exited
         process.exit(0);
     }
-
 
     const playDate = new Date(`${date} ${time}`);
 
@@ -104,58 +97,64 @@ const main = async () => {
         process.exit(0);
     }
 
-    let handle;
+    let alt;
     try {
-        handle = await input({ message: 'Bluesky handle:' });
+        alt = await input({ message: 'Alt text:' });
     } catch {
         // User exited
         process.exit(0);
     }
-    const did = await resolve(handle);
-
-    if (!did) {
-        console.error('Unable to resolve handle');
+    
+    let adult;
+    try {
+        adult = await select({
+            message: 'Adult content:',
+            choices: [
+                {
+                    name: 'None',
+                    value: false,
+                },
+                {
+                    name: 'Sexually suggestive',
+                    value: 'sexual',
+                },
+                {
+                    name: 'Non-sexual nudity',
+                    value: 'nudity',
+                },
+                {
+                    name: 'Porn',
+                    value: 'porn',
+                },
+            ],
+        });
+    } catch {
+        // User exited
         process.exit(0);
     }
 
-    const send = await redis.hSet(`artist:${song.artist_entity}`, {
-        artist: song.artist,
-        did
+    let graphic;
+    try {
+      graphic = await confirm({
+        message: 'Contains graphic media:',
+        default: false,
+      });
+    } catch {
+        // User exited
+        process.exit(0);
+    };
+
+    const send = await redis.hSet(`artwork:${song.artwork.arid}`, {
+        alt,
+        adult: JSON.stringify(adult),
+        graphic: JSON.stringify(graphic),
     });
 
     if (send < 0) {
-        console.error('Failed to add artist to tag registry');
+        console.error('Failed to add artwork to meta registry');
         process.exit(1);
     }
-    console.log('✔️ Artist tagging set up');
-
-    try {
-        if (await confirm({ message: 'Follow artist on Bluesky?' })) {
-            await follow(did);
-        }
-    } catch {
-        // User exited
-        process.exit(0);
-    }
-
-    try {
-        if (await confirm({ message: 'Backdate post with tag?' })) {
-            const postObject = await compose(song);
-            console.log('Art?');
-            if (song.artwork) {
-                console.log('Art!');
-                await process_artwork( song, postObject );
-            } else {
-                console.log('No art :(');
-                console.log('🪧  No artwork found');
-            }
-            console.log('Posting...');
-            await post( postObject );
-        }
-    } catch {
-        // User exited
-        process.exit(0);
-    }
+    console.log('✔️ Artwork meta added');
 
     console.log('✔️ Done!');
     

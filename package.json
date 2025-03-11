@@ -7,7 +7,9 @@
     "scrape": "node app/scrape.js",
     "artist-list": "node app/artist.list.js",
     "artist-add": "node app/artist.add.js",
-    "artist-delete": "node app/artist.delete.js"
+    "artist-delete": "node app/artist.delete.js",
+    "artwork-add": "node app/artwork.add.js",
+    "artwork-list": "node app/artwork.list.js"
   },
   "dependencies": {
     "@atproto/api": "^0.10.1",

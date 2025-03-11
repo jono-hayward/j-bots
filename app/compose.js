@@ -1,4 +1,6 @@
-import 'dotenv/config';
+import './config.js';
+import { getRedis } from './connections.js';
+const redis = await getRedis();
 
 import {
     searchAppleMusic,
@@ -13,7 +15,7 @@ import {
  * Compose the bluesky post based on a song
  * @param {*} song 
  */
-export const compose = async ( song, db ) => {
+export const compose = async ( song ) => {
 
     const timeOptions = {
         timeStyle: 'short',
@@ -96,11 +98,11 @@ export const compose = async ( song, db ) => {
 
     addFacet( postObject, 'tag', '#NowPlaying', '#NowPlaying' );
 
-    if (db) {
+    if (redis) {
         // Search for the artist in our bluesky links file
         console.log( '🦋  Searching for saved Bluesky profiles...' );
         
-        const did = await db.hGet(`artist:${song.artist_entity}`, 'did');
+        const did = await redis.hGet(`artist:${song.artist_entity}`, 'did');
         if (did) {
             console.log( '✅  Bluesky profile found, adding mention to post.' );
             addFacet( postObject, 'mention', song.artist, did );

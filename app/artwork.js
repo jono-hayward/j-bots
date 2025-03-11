@@ -1,5 +1,8 @@
 import './config.js';
-import { agent } from './connections.js';
+
+import { getBluesky, getRedis } from './connections.js';
+const agent = await getBluesky();
+const redis = await getRedis();
 
 const SIZE_LIMIT = 1000000;
 
@@ -31,6 +34,38 @@ export const process_artwork = async ( song, postObject ) => {
         return false;
     }
 
+    // Set up default alt text
+    const imageObject = {
+        alt: `Album artwork for "${song.album}" by ${song.artist}`,
+    };
+
+    if (redis) {
+        // Search for the artist in our bluesky links file
+        console.log( '🔍  Searching for saved artwork entries...' );
+        
+        const meta = await redis.hGetAll(`artwork:${song.artwork.arid}`);
+        if (Object.keys(meta).length) {
+            console.log('✅  Artwork meta found, adding to image.');
+            imageObject.alt = `${imageObject.alt}:\n\n${meta.alt}`;
+
+            const labels = [];
+
+            if (meta.adult !== 'false') {
+                labels.push({ val: meta.adult });
+            }
+            if (meta.graphic === 'true') {
+                labels.push({ val: 'graphic-media' });
+            }
+
+            if (labels.length) {
+                postObject.labels = {
+                    $type: 'com.atproto.label.defs#selfLabels',
+                    values: labels
+                };
+            }
+        }
+    }
+
     /**
      * Upload the art
      */
@@ -45,16 +80,15 @@ export const process_artwork = async ( song, postObject ) => {
             const { data } = await agent.uploadBlob(new Uint8Array(buffer), { encoding: 'image/jpeg' });
             console.log('✅  Uploaded!');
 
+            imageObject.image = data.blob;
+            imageObject.aspectRatio = {
+                width: art.width,
+                height: art.height,
+            };
+
             postObject.embed = {
                 $type: 'app.bsky.embed.images',
-                images: [{
-                    alt: `Album artwork for "${song.album}" by ${song.artist}`,
-                    image: data.blob,
-                    aspectRatio: {
-                        width: art.width,
-                        height: art.height,
-                    }
-                }]
+                images: [imageObject]
             };
         }
     } catch (err) {

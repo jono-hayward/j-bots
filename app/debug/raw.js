@@ -15,7 +15,7 @@ const params = new URLSearchParams( {
   station: config.station,
   order: 'asc', // We want them in descending order to always get the latest, even if for some reason there's more results than our limit
   tz: config.timezone,
-  // limit: 1,
+  limit: 40,
   from: now.toISOString().replace('Z', '+00:00:00'), // Turn the ISO string into something the ABC API will accept
   station: 'triplej',
 } );
@@ -24,8 +24,6 @@ const API = `https://music.abcradio.net.au/api/v1/plays/search.json?${params.toS
 const scrape = async () => fetch( API ).then( response => response.json() );
 
 
-console.log( 'Querying:' );
-console.log( API );
 const tracks = await scrape();
 
 // if (tracks.items.length) {

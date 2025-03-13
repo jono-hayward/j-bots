@@ -28,6 +28,12 @@ export const process_artwork = async ( song, postObject ) => {
                 break;
             }
         }
+    } else {
+        // Fail back to the full size image
+        const size = await getImageSize(song.artwork?.url);
+        if (size <= SIZE_LIMIT) {
+            art = song.artwork.url;
+        }
     }
     if (!art) {
         console.log('🪧  No artwork found.');

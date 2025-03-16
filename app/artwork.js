@@ -23,7 +23,7 @@ export const process_artwork = async ( song, postObject ) => {
     
         for (const s of song.artwork.sizes) {
             const size = await getImageSize(s.url);
-            if (size <= SIZE_LIMIT) {
+            if (size && size <= SIZE_LIMIT) {
                 art = s;
                 break;
             }
@@ -31,7 +31,7 @@ export const process_artwork = async ( song, postObject ) => {
     } else {
         // Fail back to the full size image
         const size = await getImageSize(song.artwork?.url);
-        if (size <= SIZE_LIMIT) {
+        if (size && size <= SIZE_LIMIT) {
             art = song.artwork.url;
         }
     }
@@ -112,7 +112,7 @@ export const getImageSize = async (url) => {
     const response = await fetch(url, { method: 'HEAD' });
   
     if (!response.ok) {
-      throw new Error(`Failed to fetch image headers: ${response.statusText}`);
+      return false;
     }
   
     const contentLength = response.headers.get('content-length');
@@ -120,6 +120,6 @@ export const getImageSize = async (url) => {
     if (contentLength) {
       return parseInt(contentLength, 10);
     } else {
-      throw new Error('Content-Length header not found');
+      return false;
     }
 }

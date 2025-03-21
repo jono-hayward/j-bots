@@ -16,25 +16,29 @@ export const process_artwork = async ( song, postObject ) => {
      * doesn't go over Bluesky's 1mb limit
      */
     let art;
-    if (song.artwork?.sizes?.length) {
+    if (song.artwork.url) {
+        // Check the full quality upload
+        console.log('Checking file size of', song.artwork.url);
+        const size = await getImageSize(song.artwork?.url);
+        if (size && size <= SIZE_LIMIT) {
+            art = song.artwork;
+        }
+    }
+    if (!art && song.artwork?.sizes?.length) {
+        // Check the resized artworks
         song.artwork.sizes = song.artwork.sizes
             .filter((s) => s.aspect_ratio === song.artwork_aspect)
             .sort((a, b) => b.width - a.width);
     
         for (const s of song.artwork.sizes) {
+            console.log('Checking file size of', s.url);
             const size = await getImageSize(s.url);
             if (size && size <= SIZE_LIMIT) {
                 art = s;
                 break;
             }
         }
-    } else {
-        // Fail back to the full size image
-        const size = await getImageSize(song.artwork?.url);
-        if (size && size <= SIZE_LIMIT) {
-            art = song.artwork.url;
-        }
-    }
+    } 
     if (!art) {
         console.log('🪧  No artwork found.');
         return false;
@@ -77,6 +81,7 @@ export const process_artwork = async ( song, postObject ) => {
      */
 
     try {
+        console.log('Downloading artwork', art.url);
         const response = await fetch(art.url);
         const buffer = await response.arrayBuffer();
 

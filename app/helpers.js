@@ -14,7 +14,7 @@ export const parse = (song) => {
       artist: artist?.name,
       artist_entity: artist?.arid,
       album: release?.title,
-      artwork: release?.artwork?.[0] || release?.artists?.[0]?.artwork?.[0],
+      artwork: recording.releases?.[0]?.artwork?.[0] || release?.artwork?.[0] || release?.artists?.[0]?.artwork?.[0],
       artwork_aspect: release?.artwork?.[0] ? '1x1' : '16x9',
       count: count || null,
     };
@@ -95,16 +95,20 @@ export const searchAppleMusic = async (song, debug = false) => {
 
   debug && console.log("Querying", url);
 
-  const response = await fetch(url);
-  if (response.ok) {
-    const results = await response.json();
-    debug && console.log("Raw Apple Music results", results);
-
-    if (results.resultCount) {
-      return results.results[0].trackViewUrl;
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      const results = await response.json();
+      debug && console.log("Raw Apple Music results", results);
+  
+      if (results.resultCount) {
+        return results.results[0].trackViewUrl;
+      }
+    } else {
+      console.error("⚠️  Failed to search Apple music", response);
     }
-  } else {
-    console.error("⚠️  Failed to search Apple music", response);
+  } catch (err) {
+    console.error('There was an error fetching Apple Nusic results', err);
   }
 
   return false;

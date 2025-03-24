@@ -21,7 +21,7 @@ export const parse = (song) => {
 
     if (artist?.links?.length) {
       const link = artist.links[0];
-      if (link.service_id === "unearthed") {
+      if (link.service_id === "unearthed" && link.url.startsWith('https:')) {
         result.unearthed = link.url;
       }
     }

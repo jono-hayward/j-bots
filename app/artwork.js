@@ -93,8 +93,8 @@ export const process_artwork = async ( song, postObject ) => {
 
             imageObject.image = data.blob;
             imageObject.aspectRatio = {
-                width: art.width,
-                height: art.height,
+                width: art.width || 1,
+                height: art.height || 1,
             };
 
             postObject.embed = {

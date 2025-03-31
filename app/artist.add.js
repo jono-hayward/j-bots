@@ -138,24 +138,24 @@ const main = async () => {
         process.exit(0);
     }
 
-    try {
-        if (await confirm({ message: 'Backdate post with tag?' })) {
-            const postObject = await compose(song);
-            console.log('Art?');
-            if (song.artwork) {
-                console.log('Art!');
-                await process_artwork( song, postObject );
-            } else {
-                console.log('No art :(');
-                console.log('🪧  No artwork found');
-            }
-            console.log('Posting...');
-            await post( postObject );
-        }
-    } catch {
-        // User exited
-        process.exit(0);
-    }
+    // try {
+    //     if (await confirm({ message: 'Backdate post with tag?' })) {
+    //         const postObject = await compose(song);
+    //         console.log('Art?');
+    //         if (song.artwork) {
+    //             console.log('Art!');
+    //             await process_artwork( song, postObject );
+    //         } else {
+    //             console.log('No art :(');
+    //             console.log('🪧  No artwork found');
+    //         }
+    //         console.log('Posting...');
+    //         await post( postObject );
+    //     }
+    // } catch {
+    //     // User exited
+    //     process.exit(0);
+    // }
 
     console.log('✔️ Done!');
     

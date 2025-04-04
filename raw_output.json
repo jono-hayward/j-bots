@@ -1,0 +1,399 @@
+{
+  "total": 25,
+  "offset": 0,
+  "limit": 1,
+  "items": [
+    {
+      "entity": "Play",
+      "arid": "mpnvRVvY9n",
+      "played_time": "2025-03-24T13:19:29+00:00",
+      "service_id": "triplej",
+      "recording": {
+        "entity": "Recording",
+        "arid": "mtVYLowEmK",
+        "title": "Would You Have Liked Me",
+        "metadata": null,
+        "description": null,
+        "duration": 123,
+        "artists": [
+          {
+            "entity": "Artist",
+            "arid": "mab5W3xJo5",
+            "name": "MIZUKI",
+            "artwork": [],
+            "links": [
+              {
+                "entity": "Link",
+                "arid": "mlOkXpBwbk",
+                "url": "Unearthed",
+                "id_component": "80ee0882115d7e58b6da61918ebcb696",
+                "service_id": "unearthed",
+                "title": "Unearthed Artist",
+                "mini_synopsis": null,
+                "short_synopsis": null,
+                "medium_synopsis": null,
+                "type": "profile",
+                "provider": "unearthed",
+                "external": false
+              },
+              {
+                "entity": "Link",
+                "arid": "mlxyglEQn5",
+                "url": "https://www.abc.net.au/triplejunearthed/artist/mizuki",
+                "id_component": "46a5a1ad694ea82a75a4a5e34402a778",
+                "service_id": "unearthed",
+                "title": "Unearthed Artist",
+                "mini_synopsis": null,
+                "short_synopsis": null,
+                "medium_synopsis": null,
+                "type": "profile",
+                "provider": "unearthed",
+                "external": false
+              }
+            ],
+            "is_australian": null,
+            "type": "primary",
+            "role": null
+          }
+        ],
+        "releases": [
+          {
+            "entity": "Release",
+            "arid": "mrOyGMrg6A",
+            "title": "Would You Have Liked Me",
+            "format": null,
+            "artwork": [
+              {
+                "entity": "Artwork",
+                "arid": "mib92DXnmP",
+                "url": "https://www.abc.net.au/triplej/albums/mizuki-wouldyouhavelikedme.jpg",
+                "type": "cover",
+                "title": null,
+                "mini_synopsis": null,
+                "short_synopsis": null,
+                "medium_synopsis": null,
+                "width": 1200,
+                "height": 1200,
+                "sizes": [
+                  {
+                    "url": "https://resize.abcradio.net.au/19XxEMO0XBkaqoxgEkscJPf5gJA=/100x100/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 100,
+                    "height": 100,
+                    "aspect_ratio": "1x1"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/xwf8EKxFUxzE4D2OfE8rgwPKIP0=/160x160/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 160,
+                    "height": 160,
+                    "aspect_ratio": "1x1"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/l9ARFBKyqZj8MBAqlbtJ6wWKY38=/340x340/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 340,
+                    "height": 340,
+                    "aspect_ratio": "1x1"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/dLIPWpGv7noVTccI0N44mbCi9ho=/580x580/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 580,
+                    "height": 580,
+                    "aspect_ratio": "1x1"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/gwtGF0GMkece1KDCMqv-mKOWcRo=/940x940/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 940,
+                    "height": 940,
+                    "aspect_ratio": "1x1"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/ujXBKekijB5jV4hkrqo4-Nv7CIM=/100x75/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 100,
+                    "height": 75,
+                    "aspect_ratio": "4x3"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/gJuWxKG4vnVMBFR_FEDNJGmFsJY=/160x120/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 160,
+                    "height": 120,
+                    "aspect_ratio": "4x3"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/Yb7DonlC2wW-EsxJWs_YMkqTOX4=/220x124/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 220,
+                    "height": 124,
+                    "aspect_ratio": "16x9"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/ucpx_BnfXUnSBED219FFUEQMDO0=/580x326/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 580,
+                    "height": 326,
+                    "aspect_ratio": "16x9"
+                  },
+                  {
+                    "url": "https://resize.abcradio.net.au/2s3n3RGlGVA7KLDaVeAh5YzOyuQ=/940x529/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                    "width": 940,
+                    "height": 529,
+                    "aspect_ratio": "16x9"
+                  }
+                ],
+                "is_primary": null
+              }
+            ],
+            "links": [],
+            "artists": [
+              {
+                "entity": "Artist",
+                "arid": "mab5W3xJo5",
+                "name": "MIZUKI",
+                "artwork": [],
+                "links": [
+                  {
+                    "entity": "Link",
+                    "arid": "mlOkXpBwbk",
+                    "url": "Unearthed",
+                    "id_component": "80ee0882115d7e58b6da61918ebcb696",
+                    "service_id": "unearthed",
+                    "title": "Unearthed Artist",
+                    "mini_synopsis": null,
+                    "short_synopsis": null,
+                    "medium_synopsis": null,
+                    "type": "profile",
+                    "provider": "unearthed",
+                    "external": false
+                  },
+                  {
+                    "entity": "Link",
+                    "arid": "mlxyglEQn5",
+                    "url": "https://www.abc.net.au/triplejunearthed/artist/mizuki",
+                    "id_component": "46a5a1ad694ea82a75a4a5e34402a778",
+                    "service_id": "unearthed",
+                    "title": "Unearthed Artist",
+                    "mini_synopsis": null,
+                    "short_synopsis": null,
+                    "medium_synopsis": null,
+                    "type": "profile",
+                    "provider": "unearthed",
+                    "external": false
+                  }
+                ],
+                "is_australian": null,
+                "type": "primary",
+                "role": null
+              }
+            ],
+            "record_label": null,
+            "release_year": "2025",
+            "release_album_id": null,
+            "is_primary": null
+          }
+        ],
+        "artwork": [
+          {
+            "entity": "Artwork",
+            "arid": "mi5gGoKLYg",
+            "url": "https://www.abc.net.au/triplej/albums/mizuki-wouldyouhavelikedme.jpg",
+            "type": "cover",
+            "title": null,
+            "mini_synopsis": null,
+            "short_synopsis": null,
+            "medium_synopsis": null,
+            "width": 1200,
+            "height": 1200,
+            "sizes": [
+              {
+                "url": "https://resize.abcradio.net.au/19XxEMO0XBkaqoxgEkscJPf5gJA=/100x100/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 100,
+                "height": 100,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/xwf8EKxFUxzE4D2OfE8rgwPKIP0=/160x160/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 160,
+                "height": 160,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/l9ARFBKyqZj8MBAqlbtJ6wWKY38=/340x340/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 340,
+                "height": 340,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/dLIPWpGv7noVTccI0N44mbCi9ho=/580x580/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 580,
+                "height": 580,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/gwtGF0GMkece1KDCMqv-mKOWcRo=/940x940/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 940,
+                "height": 940,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/ujXBKekijB5jV4hkrqo4-Nv7CIM=/100x75/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 100,
+                "height": 75,
+                "aspect_ratio": "4x3"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/gJuWxKG4vnVMBFR_FEDNJGmFsJY=/160x120/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 160,
+                "height": 120,
+                "aspect_ratio": "4x3"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/Yb7DonlC2wW-EsxJWs_YMkqTOX4=/220x124/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 220,
+                "height": 124,
+                "aspect_ratio": "16x9"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/ucpx_BnfXUnSBED219FFUEQMDO0=/580x326/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 580,
+                "height": 326,
+                "aspect_ratio": "16x9"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/2s3n3RGlGVA7KLDaVeAh5YzOyuQ=/940x529/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 940,
+                "height": 529,
+                "aspect_ratio": "16x9"
+              }
+            ],
+            "is_primary": null
+          }
+        ],
+        "links": []
+      },
+      "release": {
+        "entity": "Release",
+        "arid": "mrOyGMrg6A",
+        "title": "Would You Have Liked Me",
+        "format": null,
+        "artwork": [
+          {
+            "entity": "Artwork",
+            "arid": "mib92DXnmP",
+            "url": "https://www.abc.net.au/triplej/albums/mizuki-wouldyouhavelikedme.jpg",
+            "type": "cover",
+            "title": null,
+            "mini_synopsis": null,
+            "short_synopsis": null,
+            "medium_synopsis": null,
+            "width": 1200,
+            "height": 1200,
+            "sizes": [
+              {
+                "url": "https://resize.abcradio.net.au/19XxEMO0XBkaqoxgEkscJPf5gJA=/100x100/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 100,
+                "height": 100,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/xwf8EKxFUxzE4D2OfE8rgwPKIP0=/160x160/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 160,
+                "height": 160,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/l9ARFBKyqZj8MBAqlbtJ6wWKY38=/340x340/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 340,
+                "height": 340,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/dLIPWpGv7noVTccI0N44mbCi9ho=/580x580/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 580,
+                "height": 580,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/gwtGF0GMkece1KDCMqv-mKOWcRo=/940x940/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 940,
+                "height": 940,
+                "aspect_ratio": "1x1"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/ujXBKekijB5jV4hkrqo4-Nv7CIM=/100x75/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 100,
+                "height": 75,
+                "aspect_ratio": "4x3"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/gJuWxKG4vnVMBFR_FEDNJGmFsJY=/160x120/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 160,
+                "height": 120,
+                "aspect_ratio": "4x3"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/Yb7DonlC2wW-EsxJWs_YMkqTOX4=/220x124/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 220,
+                "height": 124,
+                "aspect_ratio": "16x9"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/ucpx_BnfXUnSBED219FFUEQMDO0=/580x326/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 580,
+                "height": 326,
+                "aspect_ratio": "16x9"
+              },
+              {
+                "url": "https://resize.abcradio.net.au/2s3n3RGlGVA7KLDaVeAh5YzOyuQ=/940x529/center/middle/https%3A%2F%2Fwww.abc.net.au%2Ftriplej%2Falbums%2Fmizuki-wouldyouhavelikedme.jpg",
+                "width": 940,
+                "height": 529,
+                "aspect_ratio": "16x9"
+              }
+            ],
+            "is_primary": null
+          }
+        ],
+        "links": [],
+        "artists": [
+          {
+            "entity": "Artist",
+            "arid": "mab5W3xJo5",
+            "name": "MIZUKI",
+            "artwork": [],
+            "links": [
+              {
+                "entity": "Link",
+                "arid": "mlOkXpBwbk",
+                "url": "Unearthed",
+                "id_component": "80ee0882115d7e58b6da61918ebcb696",
+                "service_id": "unearthed",
+                "title": "Unearthed Artist",
+                "mini_synopsis": null,
+                "short_synopsis": null,
+                "medium_synopsis": null,
+                "type": "profile",
+                "provider": "unearthed",
+                "external": false
+              },
+              {
+                "entity": "Link",
+                "arid": "mlxyglEQn5",
+                "url": "https://www.abc.net.au/triplejunearthed/artist/mizuki",
+                "id_component": "46a5a1ad694ea82a75a4a5e34402a778",
+                "service_id": "unearthed",
+                "title": "Unearthed Artist",
+                "mini_synopsis": null,
+                "short_synopsis": null,
+                "medium_synopsis": null,
+                "type": "profile",
+                "provider": "unearthed",
+                "external": false
+              }
+            ],
+            "is_australian": null,
+            "type": "primary",
+            "role": null
+          }
+        ],
+        "record_label": null,
+        "release_year": "2025",
+        "release_album_id": null
+      }
+    }
+  ]
+}

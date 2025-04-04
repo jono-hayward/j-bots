@@ -101,7 +101,11 @@ export const searchAppleMusic = async (song, debug = false) => {
       const results = await response.json();
       debug && console.log("Raw Apple Music results", results);
   
-      if (results.resultCount) {
+      if (
+        results.resultCount &&
+        results.results[0].artistName.toLowerCase() === song.artist.toLowerCase() &&
+        results.results[0].trackName.toLowerCase().includes(song.title.toLowerCase())
+      ) {
         return results.results[0].trackViewUrl;
       }
     } else {
@@ -146,9 +150,13 @@ export const searchSpotify = async (song, debug = false) => {
       }
     );
 
-    debug && console.log("Raw Spotify results", result);
+    debug && console.log("Raw Spotify results", result?.body?.tracks?.items);
 
-    if (result && result.body && result.body.tracks && result.body.tracks.total) {
+    if (
+      result?.body?.tracks?.total &&
+      result.body.tracks.items[0].artists[0].name.toLowerCase() === song.artist.toLowerCase() &&
+      result.body.tracks.items[0].name.toLowerCase().includes(song.title.toLowerCase())
+    ) {
       return result.body.tracks.items[0].external_urls.spotify;
     }
   } catch (err) {
@@ -169,9 +177,13 @@ export const searchYouTube = async (song, debug = false) => {
       "song"
     );
 
-    debug && console.log("Raw YouTube Music results", result);
+    debug && console.log("Raw YouTube Music results", result?.content);
 
-    if (result && result.content && result.content.length) {
+    if (
+      result?.content?.length &&
+      result.content[0].artist.name.toLowerCase() === song.artist.toLowerCase() &&
+      result.content[0].name.toLowerCase().includes(song.title.toLowerCase())
+    ) {
       return `https://music.youtube.com/watch?v=${result.content[0].videoId}`;
     }
   } catch (err) {
@@ -285,9 +297,12 @@ export const searchGenius = async (song, debug = false) => {
     const results = await response.json();
     debug && console.log("Raw Genius results", results);
 
-    if (results.response.hits.length) {
+    if (results?.response?.hits?.length) {
       const res = results.response.hits[0].result;
-      if (res.title === song.title && res.primary_artist_names === song.artist) {
+      if (
+        res.primary_artist_names.toLowerCase() === song.artist.toLowerCase() &&
+        res.title.toLowerCase().includes(song.title.toLowerCase())
+      ) {
         return results.response.hits[0].result.url;
       }
     }

@@ -1,8 +1,8 @@
 import { searchAppleMusic, searchSpotify, searchYouTube, searchGenius } from "../helpers.js";
 
 const search = {
-  title: "Eat Sleep Fuck Forever",
-  artist: "Love Fame Tragedy",
+  title: "Hide and seek",
+  artist: "Ball park music",
 }; 
 
 console.table([

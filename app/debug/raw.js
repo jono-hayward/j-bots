@@ -5,7 +5,7 @@ const config = {
   timezone:       process.env.TIMEZONE,
 };
 
-const now = new Date('2025-03-11T12:15:00+11:00');
+const now = new Date('2025-03-25T00:19:00+11:00');
 
 // const now = new Date();
 
@@ -15,9 +15,9 @@ const params = new URLSearchParams( {
   station: config.station,
   order: 'asc', // We want them in descending order to always get the latest, even if for some reason there's more results than our limit
   tz: config.timezone,
-  limit: 40,
+  limit: 1,
   from: now.toISOString().replace('Z', '+00:00:00'), // Turn the ISO string into something the ABC API will accept
-  station: 'doublej',
+  station: 'triplej',
 } );
 
 const API = `https://music.abcradio.net.au/api/v1/plays/search.json?${params.toString()}`;

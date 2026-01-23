@@ -6,6 +6,7 @@ import { process_artwork } from "./artwork.js";
 import { post } from "./post.js";
 
 import { getBluesky, getRedis } from "./connections.js";
+const redis = await getRedis();
 const agent = await getBluesky();
 
 const now = new Date();
@@ -16,7 +17,7 @@ const timeOptions = {
 
 console.log(``);
 console.log(
-  `🚀  Starting run at ${now.toLocaleTimeString("en-AU", timeOptions)}`
+  `🚀  Starting run at ${now.toLocaleTimeString("en-AU", timeOptions)}`,
 );
 console.log(``);
 
@@ -39,7 +40,7 @@ const exit = async (status) => {
     console.log(
       `🏓  Pinging health check with ${
         status === 1 ? "failure" : "success"
-      } status.`
+      } status.`,
     );
     await fetch(`${process.env.HB_PING}/${status}`);
     console.log("☑️  Done.");
@@ -51,7 +52,7 @@ let latest;
 if (feed?.data?.feed?.length) {
   // Filter out posts that begin with 🤖, which we're using for service updates
   const posts = feed.data.feed.filter(
-    (entry) => !entry.post.record.text.startsWith("🤖")
+    (entry) => !entry.post.record.text.startsWith("🤖"),
   );
   latest = new Date(posts[0].post.record.createdAt);
 
@@ -62,11 +63,11 @@ if (feed?.data?.feed?.length) {
   latest.setSeconds(latest.getSeconds() + 10);
 
   console.log(
-    `⌚️  Latest post was at ${latest.toLocaleTimeString("en-AU", timeOptions)}`
+    `⌚️  Latest post was at ${latest.toLocaleTimeString("en-AU", timeOptions)}`,
   );
 } else {
   console.log(
-    "⌚️  No previous post found, searching from the last twenty minutes"
+    "⌚️  No previous post found, searching from the last twenty minutes",
   );
 
   latest = new Date();
@@ -103,7 +104,7 @@ for (const track of tracks.items) {
     console.log(
       `🎵  Processing "${song.title}" by ${
         song.artist
-      }, played at ${song.started.toLocaleTimeString("en-AU", timeOptions)}`
+      }, played at ${song.started.toLocaleTimeString("en-AU", timeOptions)}`,
     );
     song.artist_entity &&
       console.log("🧑‍🎤  Artist entity: ", song.artist_entity);

@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 
 import './config.js';
-import { getBluesky } from './connections.js';
+import { getRedis, getBluesky } from './connections.js';
+const redis = await getRedis();
 const agent = await getBluesky();
 
 export const post = async ( postObject ) => {
@@ -13,6 +14,7 @@ export const post = async ( postObject ) => {
 
     try {
       await agent.post(postObject);
+      await redis.set(`bluesky:${process.env.BSKY_HANDLE}:session`, JSON.stringify(agent.session));
       console.log('☑️  Done!');
       success = true;
     } catch (err) {

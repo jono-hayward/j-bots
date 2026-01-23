@@ -6,8 +6,8 @@ import { process_artwork } from './artwork.js';
 import { post } from './post.js';
 
 import { getBluesky, getRedis } from './connections.js';
-const agent = await getBluesky();
 const redis = await getRedis();
+const agent = await getBluesky();
 
 const now = new Date();
 const timeOptions = {

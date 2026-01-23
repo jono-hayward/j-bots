@@ -33,10 +33,10 @@ export const compose = async ( song ) => {
 
     // Used during Hottest 100
     // if ( song.count ) {
-	  //   console.log('Track count found!');
-    //   lines.push( `🥁 2024 Hottest 200 - #${song.count}`, `` );
+	//   console.log('Track count found!');
+    //   lines.push( `🥁 Hottest 100 of Australian songs: #${song.count}`, `#Hottest100 #AusHottest100`, `` );
     // } else {
-	  //   console.log('No track count found :(');
+	//   console.log('No track count found :(');
     // }
     
     lines.push(
@@ -97,6 +97,8 @@ export const compose = async ( song ) => {
     postObject.text = lines.join('\n');
 
     addFacet( postObject, 'tag', '#NowPlaying', '#NowPlaying' );
+    addFacet( postObject, 'tag', '#Hottest100', '#Hottest100' );
+    addFacet( postObject, 'tag', '#AusHottest100', '#AusHottest100' );
 
     if (redis) {
         // Search for the artist in our bluesky links file

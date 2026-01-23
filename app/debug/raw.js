@@ -5,17 +5,17 @@ const config = {
   timezone:       process.env.TIMEZONE,
 };
 
-const now = new Date('2025-03-25T00:19:00+11:00');
+// const now = new Date('2025-03-25T00:19:00+11:00');
 
-// const now = new Date();
+const now = new Date();
 
-// now.setHours(now.getHours() - 1);
+now.setHours(now.getHours() - 1);
 
 const params = new URLSearchParams( {
   station: config.station,
   order: 'asc', // We want them in descending order to always get the latest, even if for some reason there's more results than our limit
   tz: config.timezone,
-  limit: 1,
+  // limit: 1,
   from: now.toISOString().replace('Z', '+00:00:00'), // Turn the ISO string into something the ABC API will accept
   station: 'triplej',
 } );

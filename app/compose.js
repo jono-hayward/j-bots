@@ -52,10 +52,12 @@ export const compose = async (song) => {
     console.log("Track count found!");
     const now = new Date();
     // Find a matching countdown period - from the known start date to +12 hours.
-    const countdown = hottestDates[config.station]?.find((date) => {
-      const end = new Date(date.start.getTime() + TWELVEHOURS);
-      return now >= date.start && now <= end;
-    });
+    const countdown = hottestDates[process.env.STATION.toLowerCase()]?.find(
+      (date) => {
+        const end = new Date(date.start.getTime() + TWELVEHOURS);
+        return now >= date.start && now <= end;
+      },
+    );
     if (countdown) {
       console.log(`We're in the Hottest 100 period for ${countdown.title}`);
       lines.push(`🥁 ${countdown.title}: #${song.count}`, `#Hottest100`, ``);

@@ -1,7 +1,52 @@
-import 'dotenv/config';
+import "dotenv/config";
 
 import SpotifyWebApi from "spotify-web-api-node";
 import YouTubeMusicAPI from "youtube-music-api";
+
+const TWELVEHOURS = 12 * 60 * 60 * 1000;
+
+const hottestDates = {
+  triplej: [
+    {
+      title: "Triple J's Hottest 100 of 2025",
+      start: new Date("2026-01-24T12:00:00+11:00"),
+    },
+  ],
+  doublej: [
+    {
+      title: "Double J's Hottest 100 of 2005",
+      start: new Date("2026-01-25T12:00:00+11:00"),
+    },
+  ],
+};
+
+/**
+ * Check if we're currently in an active Hottest 100 countdown period
+ * @param {Object} song - Song object with count property
+ * @returns {Object|null} - Countdown object with title if active, null otherwise
+ */
+export const getCountdown = (song) => {
+  if (!song.count || song.count <= 0) {
+    return null;
+  }
+
+  console.log("Track count found!");
+  const now = new Date();
+
+  // Find a matching countdown period - from the known start date to +12 hours.
+  const countdown = hottestDates[config.station]?.find((date) => {
+    const end = new Date(date.start.getTime() + TWELVEHOURS);
+    return now >= date.start && now <= end;
+  });
+
+  if (countdown) {
+    console.log(`We're in the Hottest 100 period for ${countdown.title}`);
+    return countdown;
+  } else {
+    console.log("No matching countdown found");
+    return null;
+  }
+};
 
 export const parse = (song) => {
   const { played_time, recording, release, count } = song;
@@ -14,14 +59,17 @@ export const parse = (song) => {
       artist: artist?.name,
       artist_entity: artist?.arid,
       album: release?.title,
-      artwork: recording.releases?.[0]?.artwork?.[0] || release?.artwork?.[0] || release?.artists?.[0]?.artwork?.[0],
-      artwork_aspect: release?.artwork?.[0] ? '1x1' : '16x9',
+      artwork:
+        recording.releases?.[0]?.artwork?.[0] ||
+        release?.artwork?.[0] ||
+        release?.artists?.[0]?.artwork?.[0],
+      artwork_aspect: release?.artwork?.[0] ? "1x1" : "16x9",
       count: count || null,
     };
 
     if (artist?.links?.length) {
       const link = artist.links[0];
-      if (link.service_id === "unearthed" && link.url.startsWith('https:')) {
+      if (link.service_id === "unearthed" && link.url.startsWith("https:")) {
         result.unearthed = link.url;
       }
     }
@@ -100,11 +148,14 @@ export const searchAppleMusic = async (song, debug = false) => {
     if (response.ok) {
       const results = await response.json();
       debug && console.log("Raw Apple Music results", results);
-  
+
       if (
         results.resultCount &&
-        results.results[0].artistName.toLowerCase() === song.artist.toLowerCase() &&
-        results.results[0].trackName.toLowerCase().includes(song.title.toLowerCase())
+        results.results[0].artistName.toLowerCase() ===
+          song.artist.toLowerCase() &&
+        results.results[0].trackName
+          .toLowerCase()
+          .includes(song.title.toLowerCase())
       ) {
         return results.results[0].trackViewUrl;
       }
@@ -112,7 +163,7 @@ export const searchAppleMusic = async (song, debug = false) => {
       console.error("⚠️  Failed to search Apple music", response);
     }
   } catch (err) {
-    console.error('There was an error fetching Apple Nusic results', err);
+    console.error("There was an error fetching Apple Nusic results", err);
   }
 
   return false;
@@ -147,15 +198,18 @@ export const searchSpotify = async (song, debug = false) => {
         limit: 1,
         country: "AU",
         type: "track",
-      }
+      },
     );
 
     debug && console.log("Raw Spotify results", result?.body?.tracks?.items);
 
     if (
       result?.body?.tracks?.total &&
-      result.body.tracks.items[0].artists[0].name.toLowerCase() === song.artist.toLowerCase() &&
-      result.body.tracks.items[0].name.toLowerCase().includes(song.title.toLowerCase())
+      result.body.tracks.items[0].artists[0].name.toLowerCase() ===
+        song.artist.toLowerCase() &&
+      result.body.tracks.items[0].name
+        .toLowerCase()
+        .includes(song.title.toLowerCase())
     ) {
       return result.body.tracks.items[0].external_urls.spotify;
     }
@@ -174,14 +228,15 @@ export const searchYouTube = async (song, debug = false) => {
   try {
     const result = await yt.search(
       `${sanitise_song(song.title)} ${song.artist}`,
-      "song"
+      "song",
     );
 
     debug && console.log("Raw YouTube Music results", result?.content);
 
     if (
       result?.content?.length &&
-      result.content[0].artist.name.toLowerCase() === song.artist.toLowerCase() &&
+      result.content[0].artist.name.toLowerCase() ===
+        song.artist.toLowerCase() &&
       result.content[0].name.toLowerCase().includes(song.title.toLowerCase())
     ) {
       return `https://music.youtube.com/watch?v=${result.content[0].videoId}`;
@@ -240,26 +295,26 @@ export const addFacet = (postObject, type, search, value) => {
 
   let feature = null;
 
-  switch(type) {
-    case 'link':
+  switch (type) {
+    case "link":
       feature = {
         $type: "app.bsky.richtext.facet#link",
         uri: value,
       };
       break;
-    case 'mention':
+    case "mention":
       feature = {
         $type: "app.bsky.richtext.facet#mention",
         did: value,
       };
       break;
-    case 'tag':
+    case "tag":
       feature = {
-        $type: 'app.bsky.richtext.facet#tag',
-        tag: value.replace(/^#/, ''),
+        $type: "app.bsky.richtext.facet#tag",
+        tag: value.replace(/^#/, ""),
       };
       break;
-    default: 
+    default:
       return false;
   }
 
@@ -268,13 +323,11 @@ export const addFacet = (postObject, type, search, value) => {
       byteStart: start,
       byteEnd: end,
     },
-    features: [
-      feature
-    ],
+    features: [feature],
   });
 
   return true;
-}
+};
 
 export const searchGenius = async (song, debug = false) => {
   const base = "https://api.genius.com/search";
@@ -311,4 +364,4 @@ export const searchGenius = async (song, debug = false) => {
   }
 
   return false;
-}
+};

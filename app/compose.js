@@ -9,24 +9,8 @@ import {
   searchYouTube,
   clockEmoji,
   addFacet,
+  getCountdown,
 } from "./helpers.js";
-
-const TWELVEHOURS = 12 * 60 * 60 * 1000;
-
-const hottestDates = {
-  triplej: [
-    {
-      title: "Triple J's Hottest 100 of 2025",
-      start: new Date("2026-01-24T12:00:00+11:00"),
-    },
-  ],
-  doublej: [
-    {
-      title: "Double J's Hottest 100 of 2005",
-      start: new Date("2026-01-25T12:00:00+11:00"),
-    },
-  ],
-};
 
 /**
  * Compose the bluesky post based on a song
@@ -48,20 +32,9 @@ export const compose = async (song) => {
   };
 
   // Used during Hottest 100
-  if (song.count && song.count > 0) {
-    console.log("Track count found!");
-    const now = new Date();
-    // Find a matching countdown period - from the known start date to +12 hours.
-    const countdown = hottestDates[config.station]?.find((date) => {
-      const end = new Date(date.start.getTime() + TWELVEHOURS);
-      return now >= date.start && now <= end;
-    });
-    if (countdown) {
-      console.log(`We're in the Hottest 100 period for ${countdown.title}`);
-      lines.push(`🥁 ${countdown.title}: #${song.count}`, `#Hottest100`, ``);
-    } else {
-      console.log("No matching countdown found");
-    }
+  const countdown = getCountdown(song);
+  if (countdown) {
+    lines.push(`🥁 ${countdown.title}: #${song.count}`, `#Hottest100`, ``);
   }
 
   lines.push(

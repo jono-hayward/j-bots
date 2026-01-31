@@ -54,7 +54,7 @@ const CONFIG = {
     playSymbolFill: "#F23F2D",
   },
   overlay: {
-    columns: 6,
+    columns: 6, // Default for 1-100, will be 8 for 101-200
     rows: 4,
     fillOpacity: 0.85,
     textTopOffset: 0,
@@ -134,11 +134,15 @@ function generatePlayingCircle(x, y) {
 /**
  * Generates the complete grid SVG for a given countdown number.
  *
- * @param {number} countdownNumber - Current countdown position (1-100).
+ * @param {number} countdownNumber - Current countdown position (1-200).
  * @returns {string} Complete SVG grid.
  */
 function generateGrid(countdownNumber) {
   let circles = "";
+
+  // For Hottest 200 (101-200), adjust the countdown number to match grid positions
+  const adjustedCountdown =
+    countdownNumber > 100 ? countdownNumber - 100 : countdownNumber;
 
   for (let col = 0; col < CONFIG.gridSize; col++) {
     for (let row = 0; row < CONFIG.gridSize; row++) {
@@ -146,10 +150,10 @@ function generateGrid(countdownNumber) {
       const positionNumber = 100 - (col * CONFIG.gridSize + row);
 
       // Determine if this circle should be filled
-      const filled = positionNumber >= countdownNumber;
+      const filled = positionNumber >= adjustedCountdown;
 
       // Check if this is the currently playing song
-      const isPlaying = positionNumber === countdownNumber;
+      const isPlaying = positionNumber === adjustedCountdown;
 
       // Calculate circle centre coordinates
       const x =
@@ -176,15 +180,19 @@ function generateGrid(countdownNumber) {
 /**
  * Generates the complete SVG with echo effects and overlay shade.
  *
- * @param {number} countdownNumber - Current countdown position (1-100).
+ * @param {number} countdownNumber - Current countdown position (1-200).
  * @param {string} taglineText - Text to display in the tagline (e.g., "TRIPLE J HOTTEST 100 OF 2025").
  * @returns {string} Complete SVG document.
  */
 function generateSVG(countdownNumber, taglineText) {
   const grid = generateGrid(countdownNumber);
+
+  // Use 8 columns for Hottest 200 (101-200) to accommodate three-digit numbers
+  const overlayColumns = countdownNumber > 100 ? 8 : CONFIG.overlay.columns;
+
   const overlayWidth =
-    CONFIG.overlay.columns * CONFIG.circleDiameter +
-    (CONFIG.overlay.columns - 1) * CONFIG.spacing;
+    overlayColumns * CONFIG.circleDiameter +
+    (overlayColumns - 1) * CONFIG.spacing;
   const overlayHeight =
     CONFIG.overlay.rows * CONFIG.circleDiameter +
     (CONFIG.overlay.rows - 1) * CONFIG.spacing;
@@ -302,7 +310,7 @@ function generateSVG(countdownNumber, taglineText) {
  * Generates a countdown graphic buffer for a specific countdown number.
  * This function creates the graphic on-the-fly without saving to disk.
  *
- * @param {number} countdownNumber - Current countdown position (1-100).
+ * @param {number} countdownNumber - Current countdown position (1-200).
  * @param {Object} countdownInfo - Countdown information object with title.
  * @param {string} countdownInfo.title - The countdown title (e.g., "Triple J's Hottest 100 of 2025").
  * @returns {Promise<Buffer>} PNG image buffer.

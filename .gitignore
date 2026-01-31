@@ -38,3 +38,6 @@ next-env.d.ts
 # logs
 /log/*
 !/log/.gitkeep
+
+# test countdown graphics
+test-countdown-*.png

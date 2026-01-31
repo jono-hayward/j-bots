@@ -1,9 +1,8 @@
 import "./config.js";
-import fs from "fs";
-import path from "path";
 
 import { getBluesky, getRedis } from "./connections.js";
 import { getCountdown } from "./helpers.js";
+import { generateCountdownGraphic } from "./countdown_graphic.js";
 const agent = await getBluesky();
 const redis = await getRedis();
 
@@ -20,40 +19,37 @@ export const process_artwork = async (song, postObject) => {
    */
   const countdown = getCountdown(song);
   if (countdown) {
-    const countdownNumber = String(song.count).padStart(3, "0");
-    const countdownPath = path.join(
-      "./graphics",
-      `countdown-${countdownNumber}.png`,
-    );
+    console.log(`🥁 Generating countdown graphic for #${song.count}`);
+    try {
+      const countdownBuffer = await generateCountdownGraphic(
+        song.count,
+        countdown,
+      );
 
-    if (fs.existsSync(countdownPath)) {
-      console.log(`🥁 Adding countdown graphic for #${song.count}`);
-      try {
-        const countdownBuffer = fs.readFileSync(countdownPath);
-
-        if (countdownBuffer.byteLength < SIZE_LIMIT) {
-          console.log("⬆️  Uploading countdown graphic to Bluesky...");
-          const { data } = await agent.uploadBlob(
-            new Uint8Array(countdownBuffer),
-            { encoding: "image/png" },
-          );
-          console.log("✅  Uploaded countdown graphic!");
-
-          images.push({
-            alt: `Hottest 100 - Number ${song.count}`,
-            image: data.blob,
-            aspectRatio: {
-              width: 1,
-              height: 1,
-            },
-          });
-        }
-      } catch (err) {
-        console.error(
-          "❌  Countdown graphic processing failed. Skipping countdown graphic...",
+      if (countdownBuffer.byteLength < SIZE_LIMIT) {
+        console.log("⬆️  Uploading countdown graphic to Bluesky...");
+        const { data } = await agent.uploadBlob(
+          new Uint8Array(countdownBuffer),
+          { encoding: "image/png" },
         );
-        console.error("Error:", err);
+        console.log("✅  Uploaded countdown graphic!");
+
+        images.push({
+          alt: `Hottest 100 - Number ${song.count}`,
+          image: data.blob,
+          aspectRatio: {
+            width: 1,
+            height: 1,
+          },
+        });
+      } else {
+        console.log("⚠️  Countdown graphic exceeds size limit, skipping...");
       }
+    } catch (err) {
+      console.error(
+        "❌  Countdown graphic processing failed. Skipping countdown graphic...",
+      );
+      console.error("Error:", err);
     }
   }
 

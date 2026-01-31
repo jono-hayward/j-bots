@@ -37,19 +37,19 @@ const fonts = getFontPaths();
  * @type {const}
  */
 const CONFIG = {
-  canvasSize: 800,
+  canvasSize: 1200,
   bgColour: "#F23F2D",
   gridSize: 10,
-  padding: 30,
-  spacing: 30,
-  borderWidth: 2,
+  padding: 45,
+  spacing: 45,
+  borderWidth: 3,
   borderColour: "#FFFFFF",
-  fillDiameter: 21,
+  fillDiameter: 31.5,
   fillColour: "#FFFFFF",
-  // Calculated circle diameter: (800 - 2*30 - 9*30) / 10 = 47px
-  circleDiameter: 47,
+  // Calculated circle diameter: (1200 - 2*45 - 9*45) / 10 = 70.5px
+  circleDiameter: 70.5,
   playingCircle: {
-    diameter: 35,
+    diameter: 52.5,
     circleFill: "#FFFFFF",
     playSymbolFill: "#F23F2D",
   },
@@ -58,15 +58,15 @@ const CONFIG = {
     rows: 4,
     fillOpacity: 0.85,
     textTopOffset: 0,
-    textBottomOffset: 10,
-    counterFontSize: "290pt",
-    taglineFontSize: "20pt",
-    shadeExpansion: 10, // Adds 20px overall while keeping the rectangle centred
-    shadeBlur: 2, // Matches CSS backdrop-filter: blur(2px)
+    textBottomOffset: 15,
+    counterFontSize: "435pt",
+    taglineFontSize: "30pt",
+    shadeExpansion: 15, // Adds 30px overall while keeping the rectangle centred
+    shadeBlur: 3, // Matches CSS backdrop-filter: blur(3px)
   },
   echoes: [
-    { scale: 0.97, opacity: 0.2, blur: 1.5 },
-    { scale: 0.94, opacity: 0.15, blur: 2 },
+    { scale: 0.97, opacity: 0.2, blur: 2.25 },
+    { scale: 0.94, opacity: 0.15, blur: 3 },
   ],
 };
 

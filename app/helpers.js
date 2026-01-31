@@ -11,6 +11,10 @@ const hottestDates = {
       title: "Triple J's Hottest 100 of 2025",
       start: new Date("2026-01-24T12:00:00+11:00"),
     },
+    {
+      title: "Triple J's Hottest 200 of 2025",
+      start: new Date("2026-01-31T10:00:00+11:00"),
+    },
   ],
   doublej: [
     {
